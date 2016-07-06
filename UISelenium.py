@@ -8,8 +8,8 @@ from selenium.common.exceptions import NoSuchElementException
 from selenium.selenium import selenium
 from selenium.webdriver.remote.command import Command
 from selenium.webdriver.common import action_chains
-
-
+import datetime
+import errno
 CUR_DIR = os.path.dirname(os.path.abspath(__file__))
 
 
@@ -18,11 +18,9 @@ class StepsClass:
     def __init__(self):
         self.driver = webdriver.Chrome('{}//chromedriver.exe'.format(CUR_DIR))
 
-    def __enter__(self):
-        return self
-
     def start(self,url):
         self.driver.get(url)
+
 
     def get_element_by_id(self, id, wait=10):
         try:
@@ -57,7 +55,18 @@ class StepsClass:
             pass
 
     def printscreen(self, filename='printscreen.png'):
-        return self.driver.get_screenshot_as_file(filename)
+        try:
+            desired_path = os.path.join(CUR_DIR, 'screenshots', datetime.date.today().__str__())
+            if os.path.exists(desired_path):
+                filepath = os.path.join(desired_path, filename)
+            else:
+                os.makedirs(desired_path)
+                filepath = os.path.join(desired_path, filename)
+            return self.driver.get_screenshot_as_file(filepath)
+        except OSError as exception:
+            if exception.errno != errno.EEXIST:
+                raise
+
 
 
     # def focus_on_element(self, element):
@@ -71,17 +80,10 @@ class StepsClass:
     def send_keys(self, keys):
         return self.driver.execute(Command.SEND_KEYS_TO_ACTIVE_ELEMENT, {'value': action_chains.ActionChains(self.driver)._keys_to_typing(keys)})
 
-    def __exit__(self, exc_type, exc_value, traceback):
+    def shutdown(self):
         self.driver.quit()
 
-if __name__ == '__main__':
 
-    with StepsClass() as inst:
-        start = inst.start('https://www.python.org/')
-        element1 = inst.get_element_by_id('id-search-field')
-        inst.click_on_focused_element(element1)
-        inst.send_keys(u'hello')
-        inst.printscreen()
 
 
 

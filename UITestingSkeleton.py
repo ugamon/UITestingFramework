@@ -1,37 +1,56 @@
-from UISelenium import *
+from config import BaseConfigEnterpreter
+from UISelenium import StepsClass
+from datetime import datetime,date
+
+class OptionsMapper:
+
+    def __init__(self):
+        self.__BaseConfigEnterpreterInst = BaseConfigEnterpreter()
 
 
-#     "start":(url)
-#     "step1":(click,),
-#     "step2":(get_element_by_id('id'),),
-#     "step3":(click(get_element_by_id)
-#
-#
-#
-from types import *
-def instruction_parser_from_file(filename='testcases.txt'):
-    instruction_list = []
-    with open(filename) as file:
-        ii = ''
-        for line in file.readlines():
-            formatted_line = line.replace('\n', '')
-            if 'nextstep' in line:
-                instruction_list.append(ii)
-                ii = ''
-            else:
-                ii += formatted_line
-    return instruction_list
+    def segmentsToActivate(self, list_of_options):
+        return True if list_of_options[0][u'start'] == u'True' else False
+
+    def commandsToExecute(self,segment):
+        _ = self.__BaseConfigEnterpreterInst.optionsAndKeysInSegment(segment)
+        if self.segmentsToActivate(_):
+            return [self.executeEnterpreter(v) for v in _]
+
+    def executeEnterpreter(self, step):
+        print(step,segments)
+        for key, value in step.items():
+
+            if u'start' in key:
+                 self.__StepsClassInst = StepsClass()
+                 self.__StepsClassInst.start(self.__BaseConfigEnterpreterInst.URL)
+            elif u'clickon' in key:
+                if u'id' in value:
+                    __ = value[value.find('(')+1:value.find(')')]
+                    self.__StepsClassInst.click_on_focused_element(self.__StepsClassInst.get_element_by_id(value[value.find('(')+1:value.find(')')]))
+
+                elif u'xpath' in value:
+                    self.__StepsClassInst.click_on_focused_element(self.__StepsClassInst.get_element_by_xpath(value[value.find('(')+1:value.find(')')]))
+
+                elif u'name' in value:
+                    self.__StepsClassInst.click_on_focused_element(self.__StepsClassInst.get_element_by_name(value[value.find('(')+1:value.find(')')]))
+            elif u'sendkeys' in key:
+
+                self.__StepsClassInst.send_keys(value)
+
+            elif u'printscreen' in key:
+
+                self.__StepsClassInst.printscreen('{0}.png'.format(segments))
+
+            elif u'shutdown' in key:
+                self.__StepsClassInst.shutdown()
+
+if __name__  == '__main__':
+    OptionsMapperInst = OptionsMapper()
+    segments = BaseConfigEnterpreter().SEGMENTS
+    print([OptionsMapperInst.commandsToExecute(segments) for segments in segments if 'global' not in segments])
 
 
-def steps_from_instructions(instruction_parsed_from_file):
 
-    if isinstance(instruction_parsed_from_file, list):
-        instruction = instruction_parser_from_file()
-        list_append = []
-        for i in instruction:
-            list_append.append(i.split(','))
-        return list_append
-    else:
-       raise TypeError
 
-print(steps_from_instructions(instruction_parser_from_file()))
+
+

@@ -1,0 +1,21 @@
+[global]
+start = False
+url = https://moskva.beeline.ru/customers/products/
+[convergence-main]
+start = True
+clickOn1 = xpath(.//div/a[@href="/customers/landing-dmc-offers/"])
+printScreen = True
+shutdown = True
+[convergence-pp]
+start = False
+clickOn1 = xpath(.//div/a[@href="/customers/landing-dmc-offers/"])
+clickOn2 = xpath(.//a[@href="/customers/conv-details-page/index/vse-v-odnom-za-501/"])
+printScreen = True
+shutdown = True
+[convergence-pp-fttb500-about]
+start = True
+clickOn1 = xpath(.//div/a[@href="/customers/landing-dmc-offers/"])
+clickOn2 = xpath(.//span[@class="dynamic promo-convergence_promo-head_scroll-link"])
+clickOn3 = xpath(.//tr[@class="promo-convergence_tariffs_last"]/*/div/a[@href="/customers/products/mobile/convorder/?soc=fttb500"])
+printScreen = True
+shutdown = True
