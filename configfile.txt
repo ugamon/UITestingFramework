@@ -7,7 +7,7 @@ clickOn1 = xpath(.//div/a[@href="/customers/landing-dmc-offers/"])
 printScreen = True
 shutdown = True
 [convergence-pp]
-start = False
+start = True
 clickOn1 = xpath(.//div/a[@href="/customers/landing-dmc-offers/"])
 clickOn2 = xpath(.//a[@href="/customers/conv-details-page/index/vse-v-odnom-za-501/"])
 printScreen = True
