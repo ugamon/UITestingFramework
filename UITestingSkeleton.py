@@ -1,26 +1,33 @@
+#encoding=utf-8
+
 from config import BaseConfigEnterpreter
-import UISelenium
 from common.exceptions import WrongConfigKeyException
+from UISelenium import DRIVER
+from common.helper import *
+import UISelenium
+
+LIST = {
+    'segment1':
+        [
+            {'get_element_by_id': "lst-ib"},
+            {'click_on_focused_element': 'true'},
+            {'send_keys': 'привет$23434$'},
+            {"shutdown": 'False'},
+        ],
+}
 
 
+def executor(segment):
 
-class Executor:
-    def __call__(self, segment):
-        step = BaseConfigEnterpreter().optionsAndKeysInSegment(segment)
+    #todo:сложно читаемый код, нужно переписать на что-то покороче
+
+    DRIVER.get('http://google.com')
+    for step in LIST[segment]:
         for key, value in step.items():
-            print(key,value)
             try:
-                getattr(UISelenium.StepsClass('https://moskva.beeline.ru'), key)(value)
+                UISelenium.strategy(getattr(UISelenium, key), convert_to_unicode(value))
             except AttributeError:
-                raise WrongConfigKeyException
-
-if __name__  == '__main__':
-    ExecutorInst = Executor()
-    segments = BaseConfigEnterpreter().SEGMENTS
-    for i in segments:
-        ExecutorInst(i)
-
-
+                print('Attribute error')
 
 
 
