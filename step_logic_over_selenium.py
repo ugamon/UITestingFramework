@@ -9,26 +9,6 @@ from selenium.webdriver.common import action_chains
 from common.helper import convert_to_bool, select_from_list_if_true, singleton
 import sys
 
-CUR_DIR = os.path.dirname(os.path.abspath(__file__))
-DRIVER = webdriver.Chrome('{}//chromedriver.exe'.format(CUR_DIR))
-element = list()
-
-def strategy(stepobject, *args):
-
-    #1) управляющая функция, в качестве аргументов передаются имя функции для исполнения и ее аргументы.
-    #2) единственное место для управления глобальным списком element
-
-    if ('id' or 'name' or 'xpath') in stepobject.func_name:
-        #todo:выражение выше потенциально выстрелит в ногу, если в функциях выполняющих действие на странице будут ключевые слова.
-        element.append(stepobject(args[0]))
-        return stepobject(args[0])
-
-    else:
-        if len(element):
-            stepobject(element.pop())
-        else:
-            stepobject(args[0])
-
 
 def get_element_by_id(id, wait=10):
         """

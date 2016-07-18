@@ -2,7 +2,7 @@
 from unittest import TestCase
 from selenium import webdriver
 import os
-import UISelenium
+import step_logic_over_selenium
 CUR_DIR = os.path.dirname(os.path.abspath(__file__))
 
 class UiFrameWorkTest(TestCase):
