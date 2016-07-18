@@ -1,19 +1,19 @@
     # encoding=utf-8
 import os
 from selenium import webdriver
+
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.remote.command import Command
 from selenium.webdriver.common import action_chains
 from common.helper import convert_to_bool, select_from_list_if_true, singleton
+import datetime
 import sys
 
 
 def get_element_by_id(id, wait=10):
-        """
-        id
-        """
+        """id"""
         try:
 
             return WebDriverWait(DRIVER, wait).until(
@@ -23,9 +23,7 @@ def get_element_by_id(id, wait=10):
            pass
 
 def get_element_by_xpath(xpath, wait=10):
-        """
-        xpath
-        """
+        """xpath"""
         try:
             return WebDriverWait(DRIVER, wait).until(
                 EC.presence_of_element_located((By.XPATH, xpath))
@@ -35,9 +33,7 @@ def get_element_by_xpath(xpath, wait=10):
             pass
 
 def get_element_by_name(name, wait=10):
-        """
-        name
-        """
+        """name"""
         try:
             return WebDriverWait(DRIVER, wait).until(
                 EC.presence_of_element_located((By.NAME, name))
@@ -58,8 +54,7 @@ def get_elements_by_xpath(xpath='//meta', wait=4):
             pass
 
 def get_element_html_content(element):
-
-    return element.get_attribute('innerHtml')
+    return(element.get_attribute('innerHtml'))
 
 def focus_on_element(element):
 
@@ -87,3 +82,12 @@ def shutdown(key=False):
                 pass
 
 
+def printscreen(filename):
+        try:
+            desired_path = os.path.join(CUR_DIR, 'screenshots', datetime.date.today().__str__())
+            filepath = os.path.join(desired_path, filename)
+            if not os.path.exists(desired_path):
+                os.makedirs(desired_path)
+        except Exception:
+            raise
+        return DRIVER.get_screenshot_as_file('{}.png'.format(filepath))

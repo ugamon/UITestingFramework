@@ -1,7 +1,0 @@
-[convergence-main]
-get_element_by_name = ctn
-
-shutdown = True
-[convergence-pp]
-
-shutdown = False

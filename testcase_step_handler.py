@@ -40,14 +40,10 @@ class TestCaseHandler(object):
         #1) управляющая функция, в качестве аргументов передаются имя функции для исполнения и ее аргументы.
         #2) единственное место для управления глобальным списком element
 
-        if ('id' or 'name' or 'xpath') in stepobject.func_name:
-            #todo:выражение выше потенциально выстрелит в ногу, если в функциях выполняющих действие на странице будут ключевые слова.
+        res = lambda: True if stepobject.__doc__ in ['id', 'xpath', 'name'] else False
+        if res():
             self.element.append(stepobject(args[0]))
             return stepobject(args[0])
-
         else:
-            if len(self.element):
-                stepobject(self.element.pop())
-            else:
-                stepobject(args[0])
+            stepobject(self.element.pop()) if len(self.element) else stepobject(args[0])
 
